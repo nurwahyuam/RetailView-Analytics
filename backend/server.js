@@ -1,30 +1,27 @@
 require("dotenv").config();
+const app = require("./src/app");
+const { testConnection } = require("./src/database/db");
 
-const express = require("express");
-const cors = require("cors");
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-const faktaRoute = require("./routes/fact");
-const produkRoute = require("./routes/dimension");
-
-// app.use("/api/produk", produkRoute);
-// app.use("/api/fakta", faktaRoute);
+const PORT = process.env.PORT || 3000;
 
 const startSever = async () => {
-  try {
-    await require("./database/db");
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-      console.log(`✅ Server running on port ${port}`);
-    });
-  } catch (error) {
-    console.error("Failed to connect to the database:", error.message);
-    process.exit(1);
-  }
+  await testConnection();
+
+  app.listen(PORT, () => {
+    console.log("");
+    console.log("╔══════════════════════════════════════════════════╗");
+    console.log("║      RetailView Analytics Backend API  v1.0      ║");
+    console.log("╠══════════════════════════════════════════════════╣");
+    console.log(`║  Status  : Running                               ║`);
+    console.log(`║  Port    : ${PORT}                                  ║`);
+    console.log(`║  Env     : ${(process.env.NODE_ENV || "development").padEnd(38)}║`);
+    console.log(`║  Base    : http://localhost:${PORT}/api/v1           ║`);
+    console.log("╚══════════════════════════════════════════════════╝");
+    console.log("");
+  });
 };
 
-startSever();
+startSever().catch((err) => {
+  console.error('❌  Gagal menjalankan server:', err.message);
+  process.exit(1);
+});
