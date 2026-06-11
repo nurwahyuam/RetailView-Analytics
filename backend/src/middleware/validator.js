@@ -49,4 +49,4 @@ const validateSales = (req, res, next) => {
   next();
 };
 
-module.exports = { validateCustomer };
+module.exports = { validateProduct, validateCustomer, validateTime, validateSales };

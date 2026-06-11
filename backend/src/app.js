@@ -5,7 +5,7 @@ const cors     = require('cors');
 
 // Routes
 const customerRoutes  = require('./routes/customer');
-// const productRoutes   = require('./routes/product');
+const productRoutes   = require('./routes/product');
 // const timeRoutes      = require('./routes/time');
 // const salesRoutes     = require('./routes/sales');
 // const analyticsRoutes = require('./routes/analytics');
@@ -34,7 +34,7 @@ app.get(`${PREFIX}/health`, (_req, res) => {
 
 // Api Routes
 app.use(`${PREFIX}/customers`, customerRoutes);
-// app.use(`${PREFIX}/products`, productRoutes);
+app.use(`${PREFIX}/products`, productRoutes);
 // app.use(`${PREFIX}/time`, timeRoutes);
 // app.use(`${PREFIX}/sales`, salesRoutes);
 // app.use(`${PREFIX}/analytics`, analyticsRoutes);
