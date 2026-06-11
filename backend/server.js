@@ -4,24 +4,22 @@ const { testConnection } = require("./src/config/db");
 
 const PORT = process.env.PORT || 3000;
 
-const startSever = async () => {
+async function startServer() {
   await testConnection();
-
   app.listen(PORT, () => {
-    console.log("");
-    console.log("╔══════════════════════════════════════════════════╗");
-    console.log("║      RetailView Analytics Backend API  v1.0      ║");
-    console.log("╠══════════════════════════════════════════════════╣");
-    console.log(`║  Status  : Running                               ║`);
-    console.log(`║  Port    : ${PORT}                                  ║`);
-    console.log(`║  Env     : ${(process.env.NODE_ENV || "development").padEnd(38)}║`);
-    console.log(`║  Base    : http://localhost:${PORT}/api/v1           ║`);
-    console.log("╚══════════════════════════════════════════════════╝");
-    console.log("");
+    console.log('');
+    console.log('╔══════════════════════════════════════════╗');
+    console.log('║   UAS Data Warehouse - Toko Retail API   ║');
+    console.log('╠══════════════════════════════════════════╣');
+    console.log(`║  Port  : ${PORT}                              ║`);
+    console.log(`║  Base  : http://localhost:${PORT}/api/v1      ║`);
+    console.log('╚══════════════════════════════════════════╝');
+    console.log('');
   });
-};
+}
 
-startSever().catch((err) => {
+
+startServer().catch((err) => {
   console.error('❌  Gagal menjalankan server:', err.message);
   process.exit(1);
 });

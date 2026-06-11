@@ -1,5 +1,5 @@
 const successResponse = (res, data, message = "Berhasil", statusCode = 200) => {
-  return res.data.status(statusCode).json({
+  return res.status(statusCode).json({
     success: true,
     statusCode,
     message,

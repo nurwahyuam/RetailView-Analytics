@@ -8,7 +8,7 @@ const notFoundHandler = (req, res) => {
   );
 };
 
-const globalErrorHandler = (err, req, res, next) => { // eslint-disable-line no-unused-vars
+const globalErrorHandler = (err, req, res, next) => {
   console.error('🔥 Error:', err.stack || err.message);
 
   // MySQL duplicate entry
