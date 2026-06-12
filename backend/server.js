@@ -11,8 +11,8 @@ async function startServer() {
     console.log('╔══════════════════════════════════════════╗');
     console.log('║   UAS Data Warehouse - Toko Retail API   ║');
     console.log('╠══════════════════════════════════════════╣');
-    console.log(`║  Port  : ${PORT}                              ║`);
-    console.log(`║  Base  : http://localhost:${PORT}/api/v1      ║`);
+    console.log(`║  Port : ${PORT}                          ║`);
+    console.log(`║  Base : http://localhost:${PORT}/api/v1  ║`);
     console.log('╚══════════════════════════════════════════╝');
     console.log('');
   });
