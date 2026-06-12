@@ -4,11 +4,11 @@
 -- Database: dw_penjualan
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS dw_penjualan
+CREATE DATABASE IF NOT EXISTS defaultdb
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
-USE dw_penjualan;
+USE defaultdb;
 
 -- ============================================================
 -- DIMENSION: dim_produk

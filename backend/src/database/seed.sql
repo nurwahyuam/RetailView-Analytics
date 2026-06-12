@@ -2,7 +2,7 @@
 -- UAS Data Warehouse - Sample Data
 -- ============================================================
 
-USE dw_penjualan;
+USE defaultdb;
 
 -- dim_produk (minimal 5 record)
 INSERT INTO dim_produk (kode_produk, nama_produk, kategori, harga) VALUES

@@ -1,27 +1,30 @@
-const mysql  = require('mysql2/promise');
-require('dotenv').config();
- 
+const mysql = require("mysql2/promise");
+require("dotenv").config();
+
 const pool = mysql.createPool({
-  host              : process.env.DB_HOST     || 'localhost',
-  port              : parseInt(process.env.DB_PORT) || 3306,
-  user              : process.env.DB_USER     || 'root',
-  password          : process.env.DB_PASSWORD || '',
-  database          : process.env.DB_NAME     || 'retailview_dw',
+  host: process.env.DB_HOST || "localhost",
+  port: parseInt(process.env.DB_PORT) || 3306,
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "retailview_dw",
   waitForConnections: true,
-  connectionLimit   : 10,
-  queueLimit        : 0,
-  timezone          : '+07:00',
+  connectionLimit: 10,
+  queueLimit: 0,
+  timezone: "+07:00",
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
- 
+
 // Test koneksi saat startup
 async function testConnection() {
   try {
-    await pool.query('SELECT 1');
+    await pool.query("SELECT 1");
     console.log(`✅  Database terhubung: ${process.env.DB_NAME}@${process.env.DB_HOST}`);
   } catch (err) {
-    console.error('❌  Koneksi database gagal:', err.message);
+    console.error("❌  Koneksi database gagal:", err.message);
     process.exit(1);
   }
 }
- 
+
 module.exports = { pool, testConnection };

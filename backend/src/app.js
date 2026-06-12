@@ -6,9 +6,9 @@ const cors     = require('cors');
 // Routes
 const customerRoutes  = require('./routes/customer');
 const productRoutes   = require('./routes/product');
-// const timeRoutes      = require('./routes/time');
-// const salesRoutes     = require('./routes/sales');
-// const analyticsRoutes = require('./routes/analytics');
+const timeRoutes      = require('./routes/time');
+const salesRoutes     = require('./routes/sales');
+const analyticsRoutes = require('./routes/analytics');
 const { notFoundHandler, globalErrorHandler } = require('./middleware/errorHandler');
 
 const app    = express();
@@ -35,9 +35,9 @@ app.get(`${PREFIX}/health`, (_req, res) => {
 // Api Routes
 app.use(`${PREFIX}/customers`, customerRoutes);
 app.use(`${PREFIX}/products`, productRoutes);
-// app.use(`${PREFIX}/time`, timeRoutes);
-// app.use(`${PREFIX}/sales`, salesRoutes);
-// app.use(`${PREFIX}/analytics`, analyticsRoutes);
+app.use(`${PREFIX}/times`, timeRoutes);
+app.use(`${PREFIX}/sales`, salesRoutes);
+app.use(`${PREFIX}/analytics`, analyticsRoutes);
 
 // Error Handlers
 app.use(notFoundHandler);
