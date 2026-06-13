@@ -582,7 +582,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"id_produk\": 1,\n  \"id_pelanggan\": 1,\n  \"id_waktu\": 1,\n  \"jumlah\": 2,\n  \"harga_satuan\": 8500000\n}"
+              "raw": "{\n  \"id_produk\": 1,\n  \"id_pelanggan\": 3,\n  \"tanggal\": \"2025-06-13\",\n  \"jumlah\": 5,\n  \"harga_satuan\": 8500000\n}"
             },
             "url": {
               "raw": "{{base}}/sales",
