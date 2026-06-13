@@ -1,0 +1,832 @@
+{
+  "info": {
+    "_postman_id": "cb6911a0-2fd5-4de9-929a-fc171d1adad0",
+    "name": "UAS Data Warehouse - Toko Retail Online",
+    "description": "Testing API UAS DW | Base URL: [http://localhost:3000/api/v1](http://localhost:3000/api/v1)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38659834"
+  },
+  "item": [
+    {
+      "name": "🟢 Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/health",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📦 dim_produk",
+      "item": [
+        {
+          "name": "GET Semua Produk",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/products",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Filter Kategori",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/products?kategori=Elektronik",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "kategori",
+                  "value": "Elektronik"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Produk by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/products/1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Tambah Produk",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kode_produk\": \"PRD-009\",\n  \"nama_produk\": \"Flash Disk 64GB\",\n  \"kategori\": \"Elektronik\",\n  \"harga\": 125000\n}"
+            },
+            "url": {
+              "raw": "{{base}}/products",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Produk",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kode_produk\": \"PRD-009\",\n  \"nama_produk\": \"Flash Disk 128GB\",\n  \"kategori\": \"Elektronik\",\n  \"harga\": 160000\n}"
+            },
+            "url": {
+              "raw": "{{base}}/products/9",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "products",
+                "9"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Produk",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/products/9",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "products",
+                "9"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Validasi Gagal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_produk\": \"Tanpa Kode\"\n}"
+            },
+            "url": {
+              "raw": "{{base}}/products",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👥 dim_pelanggan",
+      "item": [
+        {
+          "name": "GET Semua Pelanggan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/customers",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "customers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Filter Kota",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/customers?kota=Surabaya",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "customers"
+              ],
+              "query": [
+                {
+                  "key": "kota",
+                  "value": "Surabaya"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Pelanggan by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/customers/1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "customers",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Tambah Pelanggan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kode_pelanggan\": \"CST-008\",\n  \"nama_pelanggan\": \"Rina Kartika\",\n  \"jenis_kelamin\": \"P\",\n  \"kota\": \"Surabaya\"\n}"
+            },
+            "url": {
+              "raw": "{{base}}/customers",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "customers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Pelanggan",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kode_pelanggan\": \"CST-008\",\n  \"nama_pelanggan\": \"Rina Kartini\",\n  \"jenis_kelamin\": \"P\",\n  \"kota\": \"Surabaya\"\n}"
+            },
+            "url": {
+              "raw": "{{base}}/customers/8",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "customers",
+                "8"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Pelanggan",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/customers/8",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "customers",
+                "8"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Validasi Gagal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_produk\": \"Tanpa Kode\"\n}"
+            },
+            "url": {
+              "raw": "{{base}}/customers",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "customers"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📅 dim_waktu",
+      "item": [
+        {
+          "name": "GET Semua Waktu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/times",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "times"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Filter Tahun",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/times?tahun=2025",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "times"
+              ],
+              "query": [
+                {
+                  "key": "tahun",
+                  "value": "2025"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Waktu by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/times/13",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "times",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Create Tanggal (Auto-generate)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tanggal\": \"2025-06-09\"\n}"
+            },
+            "url": {
+              "raw": "{{base}}/times",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "times"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Waktu",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tanggal\": \"2025-05-09\"\n}"
+            },
+            "url": {
+              "raw": "{{base}}/times/13",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "times",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Waktu",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/times/13",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "times",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Validasi Gagal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_produk\": \"Tanpa Kode\"\n}"
+            },
+            "url": {
+              "raw": "{{base}}/times",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "times"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "💰 fact_penjualan",
+      "item": [
+        {
+          "name": "GET Semua Penjualan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/sales",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "sales"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Filter Tahun",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/sales?tahun=2025",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "sales"
+              ],
+              "query": [
+                {
+                  "key": "tahun",
+                  "value": "2025"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Penjualan by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/sales/1",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "sales",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Tambah Transaksi",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_produk\": 1,\n  \"id_pelanggan\": 3,\n  \"tanggal\": \"2025-06-13\",\n  \"jumlah\": 5,\n  \"harga_satuan\": 8500000\n}"
+            },
+            "url": {
+              "raw": "{{base}}/sales",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "sales"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Transaksi",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_produk\": 2,\n  \"id_pelanggan\": 1,\n  \"id_waktu\": 1,\n  \"jumlah\": 2,\n  \"harga_satuan\": 250000\n}"
+            },
+            "url": {
+              "raw": "{{base}}/sales/16",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "sales",
+                "16"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Penjualan",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/sales/16",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "sales",
+                "16"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Validasi Gagal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_produk\": \"Tanpa Kode\"\n}"
+            },
+            "url": {
+              "raw": "{{base}}/sales",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "sales"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📊 Analytics / Dashboard",
+      "item": [
+        {
+          "name": "GET Summary Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/analytics/summary",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "analytics",
+                "summary"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Query 1 - Per Produk",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/analytics/per-product",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "analytics",
+                "per-product"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Query 1 - Slice Elektronik",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/analytics/per-product?kategori=Elektronik",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "analytics",
+                "per-product"
+              ],
+              "query": [
+                {
+                  "key": "kategori",
+                  "value": "Elektronik"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Query 2 - Tren Bulanan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/analytics/trend-month?tahun=2025",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "analytics",
+                "trend-month"
+              ],
+              "query": [
+                {
+                  "key": "tahun",
+                  "value": "2025"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Query 2 - Tren + Slice",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/analytics/trend-month?tahun=2025&kategori=Pakaian",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "analytics",
+                "trend-month"
+              ],
+              "query": [
+                {
+                  "key": "tahun",
+                  "value": "2025"
+                },
+                {
+                  "key": "kategori",
+                  "value": "Pakaian"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Query 3 - Top Pelanggan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/analytics/top-customers",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "analytics",
+                "top-customers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Kategori (OLAP Slice)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base}}/analytics/categories",
+              "host": [
+                "{{base}}"
+              ],
+              "path": [
+                "analytics",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base",
+      "value": "http://localhost:3000/api/v1"
+    }
+  ]
+}
