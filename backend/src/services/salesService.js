@@ -70,7 +70,30 @@ const getById = async (id) => {
 };
 
 const create = async (body) => {
-  const { id_produk, id_pelanggan, id_waktu, jumlah, harga_satuan } = body;
+  const { id_produk, id_pelanggan, tanggal, jumlah, harga_satuan } = body;
+
+  const [[produk]] = await pool.query("SELECT * FROM dim_produk WHERE id_produk = ?", [id_produk]);
+  if (!produk) {
+    throw new Error("Produk tidak ditemukan");
+  }
+  if (Number(produk.harga) !== Number(harga_satuan)) {
+    throw new Error("Harga satuan tidak sesuai dengan harga produk");
+  }
+
+  let [[waktu]] = await pool.query("SELECT id_waktu FROM dim_waktu WHERE tanggal = ?", [tanggal]);
+
+  if (!waktu) {
+    const d = new Date(tanggal);
+    const tahun = d.getFullYear();
+    const bulan = d.getMonth() + 1;
+    const bulan_nama = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"][bulan];
+    const kuartal = Math.ceil(bulan / 3);
+
+    const [inserted] = await pool.query("INSERT INTO dim_waktu (tanggal, tahun, bulan, bulan_nama, kuartal) VALUES (?, ?, ?, ?, ?)", [tanggal, tahun, bulan, bulan_nama, kuartal]);
+
+    waktu = { id_waktu: inserted.insertId };
+  }
+
   const qty = Number(jumlah);
   const harga = Number(harga_satuan);
   const total = parseFloat((qty * harga).toFixed(2));
@@ -78,13 +101,67 @@ const create = async (body) => {
   const [result] = await pool.query(
     `INSERT INTO fact_penjualan (id_produk, id_pelanggan, id_waktu, jumlah, harga_satuan, total_harga)
      VALUES (?, ?, ?, ?, ?, ?)`,
-    [id_produk, id_pelanggan, id_waktu, qty, harga, total],
+    [id_produk, id_pelanggan, waktu.id_waktu, qty, harga, total],
   );
   return getById(result.insertId);
 };
 
 const update = async (id, body) => {
-  const { id_produk, id_pelanggan, id_waktu, jumlah, harga_satuan } = body;
+  const { id_produk, id_pelanggan, tanggal, jumlah, harga_satuan } = body;
+
+  const [[produk]] = await pool.query(
+    "SELECT * FROM dim_produk WHERE id_produk = ?",
+    [id_produk],
+  );
+
+  if (!produk) {
+    throw new Error("Produk tidak ditemukan");
+  }
+
+  if (Number(produk.harga) !== Number(harga_satuan)) {
+    throw new Error("Harga satuan tidak sesuai dengan harga produk");
+  }
+
+  let [[waktu]] = await pool.query(
+    "SELECT id_waktu FROM dim_waktu WHERE tanggal = ?",
+    [tanggal],
+  );
+
+  if (!waktu) {
+    const d = new Date(tanggal);
+    const tahun = d.getFullYear();
+    const bulan = d.getMonth() + 1;
+
+    const bulan_nama = [
+      "",
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ][bulan];
+
+    const kuartal = Math.ceil(bulan / 3);
+
+    const [inserted] = await pool.query(
+      `INSERT INTO dim_waktu
+       (tanggal, tahun, bulan, bulan_nama, kuartal)
+       VALUES (?, ?, ?, ?, ?)`,
+      [tanggal, tahun, bulan, bulan_nama, kuartal],
+    );
+
+    waktu = {
+      id_waktu: inserted.insertId,
+    };
+  }
+
   const qty = Number(jumlah);
   const harga = Number(harga_satuan);
   const total = parseFloat((qty * harga).toFixed(2));
@@ -93,8 +170,9 @@ const update = async (id, body) => {
     `UPDATE fact_penjualan
      SET id_produk=?, id_pelanggan=?, id_waktu=?, jumlah=?, harga_satuan=?, total_harga=?
      WHERE id_penjualan=?`,
-    [id_produk, id_pelanggan, id_waktu, qty, harga, total, id],
+    [id_produk, id_pelanggan, waktu.id_waktu, qty, harga, total, id],
   );
+
   return getById(id);
 };
 

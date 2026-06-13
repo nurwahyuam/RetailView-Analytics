@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import api from '../api/axios';
+import Swal from 'sweetalert2';
 
 const items = ref([]);
 const products = ref([]);
@@ -11,7 +12,7 @@ const form = ref({
   id_penjualan: null,
   id_produk: '',
   id_pelanggan: '',
-  tanggal: new Date().toISOString().split('T')[0], // For creating dim_waktu automatically
+  tanggal: new Date().toLocaleDateString('en-CA'), // For creating dim_waktu automatically
   jumlah: 1,
   harga_satuan: 0
 });
@@ -61,7 +62,7 @@ const resetForm = () => {
     id_penjualan: null,
     id_produk: '',
     id_pelanggan: '',
-    tanggal: new Date().toISOString().split('T')[0],
+    tanggal: new Date().toLocaleDateString('en-CA'),
     jumlah: 1,
     harga_satuan: 0
   };
@@ -69,53 +70,70 @@ const resetForm = () => {
 
 const editItem = (item) => {
   isEditing.value = true;
-  form.value = { 
+  form.value = {
     id_penjualan: item.id_penjualan,
     id_produk: item.id_produk,
     id_pelanggan: item.id_pelanggan,
-    tanggal: item.dim_waktu ? item.dim_waktu.tanggal : new Date().toISOString().split('T')[0],
+    tanggal: item.tanggal
+      ? new Date(item.tanggal).toLocaleDateString('en-CA', {
+        timeZone: 'UTC'
+      })
+      : new Date().toLocaleDateString('en-CA'),
     jumlah: item.jumlah,
     harga_satuan: item.harga_satuan
   };
 };
 
 const deleteItem = async (id) => {
-  if(confirm('Yakin ingin menghapus transaksi ini?')) {
-    try {
-      await api.delete(`/sales/${id}`);
-      fetchItems();
-    } catch (error) {
-      console.error('Error deleting sale', error);
-    }
+  const result = await Swal.fire({
+    title: 'Hapus Transaksi?',
+    text: 'Data yang dihapus tidak dapat dikembalikan.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Ya, hapus',
+    cancelButtonText: 'Batal',
+    reverseButtons: true
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    await api.delete(`/sales/${id}`);
+
+    await Swal.fire({
+      icon: 'success',
+      title: 'Berhasil',
+      text: 'Transaksi berhasil dihapus',
+      timer: 2000,
+      showConfirmButton: false
+    });
+
+    fetchItems();
+
+  } catch (error) {
+    console.error('Error deleting sale', error);
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal',
+      text:
+        error.response?.data?.message ||
+        'Gagal menghapus transaksi',
+      confirmButtonText: 'OK'
+    });
   }
 };
 
 const submitForm = async () => {
-  try {
-    // We first need to ensure the dim_waktu is created or retrieved
-    // The backend might create it automatically if we send it in some way, or we need to hit POST /times first
-    // Based on Postman collection, POST /times with { "tanggal": "YYYY-MM-DD" } creates it
-    let id_waktu = null;
-    try {
-      const timeRes = await api.post('/times', { tanggal: form.value.tanggal });
-      id_waktu = timeRes.data.data.id_waktu;
-    } catch (error) {
-      // If it exists, it might return error or we need to search it.
-      // Let's assume the backend handles it gracefully or returns existing id_waktu
-      console.error('Error creating time dimension', error);
-      // Fallback: try to fetch by date if possible (depends on backend implementation)
-      alert("Pastikan endpoint POST /times mendukung auto-create atau ignore jika ada");
-      return;
-    }
-
+  try { 
     const payload = {
       id_produk: form.value.id_produk,
       id_pelanggan: form.value.id_pelanggan,
-      id_waktu: id_waktu,
+      tanggal: form.value.tanggal,
       jumlah: form.value.jumlah,
       harga_satuan: form.value.harga_satuan
     };
-
+    
     if (isEditing.value) {
       await api.put(`/sales/${form.value.id_penjualan}`, payload);
     } else {
@@ -123,8 +141,29 @@ const submitForm = async () => {
     }
     fetchItems();
     resetForm();
+    Swal.fire({
+      icon: 'success',
+      title: 'Berhasil',
+      text: isEditing.value
+        ? 'Transaksi berhasil diperbarui'
+        : 'Transaksi berhasil ditambahkan',
+      timer: 2000,
+      showConfirmButton: false
+    });
   } catch (error) {
     console.error('Error submitting sale', error);
+
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.errors?.join(', ') ||
+      'Gagal menyimpan transaksi';
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal',
+      text: message,
+      confirmButtonText: 'OK'
+    });
   }
 };
 
@@ -217,7 +256,15 @@ const getCustomerName = (id) => {
             <td>{{ item.id_penjualan }}</td>
             <td>{{ getProductName(item.id_produk) }}</td>
             <td>{{ getCustomerName(item.id_pelanggan) }}</td>
-            <td>{{ item.dim_waktu ? item.dim_waktu.tanggal : item.id_waktu }}</td>
+            <td>
+              {{
+                item.tanggal
+                  ? new Date(item.tanggal).toLocaleDateString('id-ID', {
+                    timeZone: 'UTC'
+              })
+              : '-'
+              }}
+            </td>
             <td>{{ item.jumlah }}</td>
             <td class="amount">{{ formatCurrency(item.total_harga) }}</td>
             <td>

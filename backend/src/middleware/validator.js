@@ -38,11 +38,12 @@ const validateTime = (req, res, next) => {
 
 // Sales
 const validateSales = (req, res, next) => {
-  const { id_produk, id_pelanggan, id_waktu, jumlah, harga_satuan } = req.body;
+  const { id_produk, id_pelanggan, tanggal, jumlah, harga_satuan } = req.body;
   const errors = [];
   if (!id_produk || isNaN(Number(id_produk))) errors.push("id_produk harus berupa angka");
   if (!id_pelanggan || isNaN(Number(id_pelanggan))) errors.push("id_pelanggan harus berupa angka");
-  if (!id_waktu || isNaN(Number(id_waktu))) errors.push("id_waktu harus berupa angka");
+  if (!tanggal) errors.push("tanggal wajib diisi (format: YYYY-MM-DD)");
+  else if (!/^\d{4}-\d{2}-\d{2}$/.test(tanggal)) errors.push("tanggal harus berformat YYYY-MM-DD");
   if (!jumlah || isNaN(Number(jumlah)) || Number(jumlah) < 1) errors.push("jumlah harus angka >= 1");
   if (!harga_satuan || isNaN(Number(harga_satuan))) errors.push("harga_satuan harus berupa angka");
   if (errors.length) return errorResponse(res, "Validasi gagal", 422, errors);
