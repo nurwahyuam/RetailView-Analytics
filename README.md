@@ -23,7 +23,16 @@ RetailView-Analytics/
 │   ├── .env                      # Konfigurasi environment (tidak di-push)
 │   └── package.json
 │
-└── frontend/                     # Tampilan website (HTML/CSS/JS)
+└── frontend/                     # Tampilan website (Vue.js + Vite)
+    ├── src/
+    │   ├── api/                  # Konfigurasi Axios & Fetch
+    │   ├── router/               # Navigasi & Routing Vue
+    │   ├── views/                # Halaman (Dashboard, Produk, dll)
+    │   ├── App.vue               # Komponen Layout Utama (Sidebar)
+    │   ├── main.js               # Entry point Vue.js
+    │   └── style.css             # Styling CSS (Tema Gelap)
+    ├── package.json
+    └── vite.config.js
 ```
 
 ---
@@ -143,7 +152,16 @@ http://localhost:3000/api/v1
 
 ### 7. Jalankan Frontend
 
-Buka folder `frontend/` lalu buka file `index.html` di browser, atau gunakan ekstensi **Live Server** di VS Code.
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Aplikasi web berjalan di:
+```
+http://localhost:5173
+```
 
 ---
 
