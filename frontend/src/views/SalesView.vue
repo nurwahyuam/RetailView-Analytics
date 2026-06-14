@@ -2,11 +2,11 @@
 import { ref, onMounted, computed } from 'vue';
 import api from '../api/axios';
 import Swal from 'sweetalert2';
+import { useAlert } from '../components/utils/alert';
 
 const items = ref([]);
 const products = ref([]);
 const customers = ref([]);
-
 const isEditing = ref(false);
 const form = ref({
   id_penjualan: null,
@@ -85,47 +85,35 @@ const editItem = (item) => {
 };
 
 const deleteItem = async (id) => {
-  const result = await Swal.fire({
-    title: 'Hapus Transaksi?',
-    text: 'Data yang dihapus tidak dapat dikembalikan.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Ya, hapus',
-    cancelButtonText: 'Batal',
-    reverseButtons: true
-  });
+  // 1. Panggil konfirmasi dari helper
+  const yakin = await useAlert.confirm('Data yang dihapus tidak dapat dikembalikan.', 'Hapus Transaksi?');
 
-  if (!result.isConfirmed) return;
+  // 2. Jika user klik Batal, langsung hentikan fungsi
+  if (!yakin) return;
 
   try {
+    // 3. Eksekusi hapus ke API
     await api.delete(`/sales/${id}`);
 
-    await Swal.fire({
-      icon: 'success',
-      title: 'Berhasil',
-      text: 'Transaksi berhasil dihapus',
-      timer: 2000,
-      showConfirmButton: false
-    });
+    // 4. Munculkan alert sukses
+    useAlert.success('Transaksi berhasil dihapus');
 
+    // 5. Refresh data tabel
     fetchItems();
 
   } catch (error) {
     console.error('Error deleting sale', error);
 
-    Swal.fire({
-      icon: 'error',
-      title: 'Gagal',
-      text:
-        error.response?.data?.message ||
-        'Gagal menghapus transaksi',
-      confirmButtonText: 'OK'
-    });
+    // 6. Ambil pesan error dari backend jika ada, kalau tidak ada pakai pesan default
+    const pesanError = error.response?.data?.message || 'Gagal menghapus transaksi';
+
+    // 7. Munculkan alert gagal
+    useAlert.error(pesanError);
   }
 };
 
 const submitForm = async () => {
-  try { 
+  try {
     const payload = {
       id_produk: form.value.id_produk,
       id_pelanggan: form.value.id_pelanggan,
@@ -133,37 +121,28 @@ const submitForm = async () => {
       jumlah: form.value.jumlah,
       harga_satuan: form.value.harga_satuan
     };
-    
+
     if (isEditing.value) {
       await api.put(`/sales/${form.value.id_penjualan}`, payload);
     } else {
       await api.post('/sales', payload);
     }
-    fetchItems();
+
+    const pesanSukses = isEditing.value
+      ? 'Transaksi berhasil diperbarui'
+      : 'Transaksi berhasil ditambahkan';
+      
+    await fetchItems();
     resetForm();
-    Swal.fire({
-      icon: 'success',
-      title: 'Berhasil',
-      text: isEditing.value
-        ? 'Transaksi berhasil diperbarui'
-        : 'Transaksi berhasil ditambahkan',
-      timer: 2000,
-      showConfirmButton: false
-    });
+
+    useAlert.success(pesanSukses);
   } catch (error) {
     console.error('Error submitting sale', error);
-
-    const message =
+    const pesanGagal =
       error.response?.data?.message ||
       error.response?.data?.errors?.join(', ') ||
       'Gagal menyimpan transaksi';
-
-    Swal.fire({
-      icon: 'error',
-      title: 'Gagal',
-      text: message,
-      confirmButtonText: 'OK'
-    });
+    useAlert.error(pesanGagal);
   }
 };
 
@@ -218,7 +197,7 @@ const getCustomerName = (id) => {
           <div class="form-group">
             <label>Harga Satuan</label>
             <div style="display: flex; align-items: center; gap: 1rem;">
-              <input type="number" v-model="form.harga_satuan" class="form-control" required readonly style="opacity: 0.7;" />
+              <input type="text" :value="formatCurrency(form.harga_satuan)" class="form-control" readonly style="opacity: 0.7;" />
               <span style="color: var(--text-secondary); font-size: 0.8rem;">(otomatis terisi dari produk)</span>
             </div>
           </div>
