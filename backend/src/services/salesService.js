@@ -109,10 +109,7 @@ const create = async (body) => {
 const update = async (id, body) => {
   const { id_produk, id_pelanggan, tanggal, jumlah, harga_satuan } = body;
 
-  const [[produk]] = await pool.query(
-    "SELECT * FROM dim_produk WHERE id_produk = ?",
-    [id_produk],
-  );
+  const [[produk]] = await pool.query("SELECT * FROM dim_produk WHERE id_produk = ?", [id_produk]);
 
   if (!produk) {
     throw new Error("Produk tidak ditemukan");
@@ -122,31 +119,14 @@ const update = async (id, body) => {
     throw new Error("Harga satuan tidak sesuai dengan harga produk");
   }
 
-  let [[waktu]] = await pool.query(
-    "SELECT id_waktu FROM dim_waktu WHERE tanggal = ?",
-    [tanggal],
-  );
+  let [[waktu]] = await pool.query("SELECT id_waktu FROM dim_waktu WHERE tanggal = ?", [tanggal]);
 
   if (!waktu) {
     const d = new Date(tanggal);
     const tahun = d.getFullYear();
     const bulan = d.getMonth() + 1;
 
-    const bulan_nama = [
-      "",
-      "Januari",
-      "Februari",
-      "Maret",
-      "April",
-      "Mei",
-      "Juni",
-      "Juli",
-      "Agustus",
-      "September",
-      "Oktober",
-      "November",
-      "Desember",
-    ][bulan];
+    const bulan_nama = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"][bulan];
 
     const kuartal = Math.ceil(bulan / 3);
 
