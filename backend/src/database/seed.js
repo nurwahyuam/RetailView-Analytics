@@ -14,7 +14,7 @@ async function run() {
     const sql = fs.readFileSync(path.join(__dirname, 'seed.sql'), 'utf8');
     console.log('⏳  Memasukkan sample data ...');
     await conn.query(sql);
-    console.log('✅  Seed data berhasil: 8 produk, 7 pelanggan, 12 waktu, 15 penjualan');
+    console.log('✅  Seed data berhasil dimasukkan');
   } catch (err) {
     console.error('❌  Error seed:', err.message);
   } finally { await conn.end(); }

@@ -14,7 +14,7 @@ async function run() {
     const sql = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
     console.log('⏳  Menjalankan schema.sql ...');
     await conn.query(sql);
-    console.log('✅  Schema dw_penjualan berhasil dibuat');
+    console.log('✅  Schema berhasil dibuat');
   } catch (err) {
     console.error('❌  Error schema:', err.message);
   } finally { await conn.end(); }
