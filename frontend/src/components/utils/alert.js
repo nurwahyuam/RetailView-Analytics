@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 
 const toast = Swal.mixin({
-  confirmButtonColor: "#37575a", 
+  confirmButtonColor: "#dc2626",
   cancelButtonColor: "#64748b",
   fontFamily: "'Outfit', sans-serif",
 });
@@ -23,8 +23,8 @@ export const useAlert = {
     });
   },
 
-  confirm(message, title = "Apakah kamu yakin?") {
-    return toast.fire({
+  async confirm(message, title = "Apakah kamu yakin?") {
+    const result = await toast.fire({
       title: title,
       text: message,
       icon: "warning",
@@ -33,5 +33,7 @@ export const useAlert = {
       cancelButtonText: "Batal",
       reverseButtons: true,
     });
+
+    return result.isConfirmed;
   },
 };

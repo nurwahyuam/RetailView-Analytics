@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '../api/axios';
+import { useAlert } from '../components/utils/alert';
 
 const items = ref([]);
+const categories = ref([]);
 const isEditing = ref(false);
 const form = ref({
   id_produk: null,
@@ -25,6 +27,20 @@ onMounted(() => {
   fetchItems();
 });
 
+const fetchCategories = async () => {
+  try {
+    const response = await api.get('/analytics/categories');
+
+    categories.value = response.data.data;
+  } catch (error) {
+    console.error('Gagal mengambil kategori:', error);
+  }
+};
+
+onMounted(() => {
+  fetchCategories();
+});
+
 const resetForm = () => {
   isEditing.value = false;
   form.value = {
@@ -38,17 +54,33 @@ const resetForm = () => {
 
 const editItem = (item) => {
   isEditing.value = true;
-  form.value = { ...item };
+
+  const kategori = categories.value.find(
+    cat => cat.nama_kategori === item.kategori
+  );
+
+  form.value = {
+    id_produk: item.id_produk,
+    kode_produk: item.kode_produk,
+    nama_produk: item.nama_produk,
+    kategori: kategori?.nama_kategori || '',
+    harga: item.harga
+  };
 };
 
 const deleteItem = async (id) => {
-  if(confirm('Yakin ingin menghapus produk ini?')) {
-    try {
-      await api.delete(`/products/${id}`);
-      fetchItems();
-    } catch (error) {
-      console.error('Error deleting product', error);
-    }
+  const yakin = await useAlert.confirm('Data produk yang dihapus tidak dapat dikembalikan.', 'Hapus Produk?');
+
+  if (!yakin) return;
+
+  try {
+    await api.delete(`/products/${id}`);
+    useAlert.success('Produk berhasil dihapus');
+    fetchItems();
+  } catch (error) {
+    console.error('Error deleting product', error);
+    const pesanError = error.response?.data?.message || 'Gagal menghapus produk';
+    useAlert.error(pesanError);
   }
 };
 
@@ -59,10 +91,22 @@ const submitForm = async () => {
     } else {
       await api.post('/products', form.value);
     }
-    fetchItems();
+
+    const pesanSukses = isEditing.value
+      ? 'Produk berhasil diperbarui'
+      : 'Produk berhasil ditambahkan';
+
+    await fetchItems();
     resetForm();
+
+    useAlert.success(pesanSukses);
   } catch (error) {
     console.error('Error submitting product', error);
+    const pesanGagal =
+      error.response?.data?.message ||
+      error.response?.data?.errors?.join(', ') ||
+      'Gagal menyimpan data produk';
+    useAlert.error(pesanGagal);
   }
 };
 
@@ -90,10 +134,10 @@ const formatCurrency = (val) => {
             <label>Kategori</label>
             <select v-model="form.kategori" class="form-control" required>
               <option value="" disabled>Pilih Kategori</option>
-              <option value="Elektronik">Elektronik</option>
-              <option value="Aksesoris">Aksesoris</option>
-              <option value="Pakaian">Pakaian</option>
-              <option value="Makanan">Makanan</option>
+
+              <option v-for="kategori in categories" :key="kategori" :value="kategori">
+                {{ kategori }}
+              </option>
             </select>
           </div>
           <div class="form-group">
